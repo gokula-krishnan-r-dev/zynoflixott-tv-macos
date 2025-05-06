@@ -119,7 +119,7 @@ class VideoDetailCard extends StatelessWidget {
                 Text(
                   video['title'] ?? 'Untitled Video',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: AppTheme.primaryTextColor,
+                    color: AppTheme.primaryColor,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -222,7 +222,7 @@ class VideoDetailCard extends StatelessWidget {
                       onPressed: onAddToListPressed,
                       icon: const Icon(
                         Icons.add,
-                        color: AppTheme.primaryTextColor,
+                        color: AppTheme.accentColor,
                       ),
                       style: IconButton.styleFrom(
                         backgroundColor: AppTheme.surfaceColor,

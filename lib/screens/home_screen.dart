@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import 'banner_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:zynoflixott_tv/screens/english_videos_screen.dart';
+import '../models/media_content.dart';
+import '../widgets/featured_content_carousel.dart';
+import '../utils/responsive_layout.dart';
+import 'package:zynoflixott_tv/screens/video_player_screen.dart' as player;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,236 +14,222 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedNavIndex = 0;
+  // Sample data
+  final List<MediaContent> _featuredContent = MediaContent.getSampleFeaturedContent();
+  final List<MediaContent> _movies = MediaContent.getSampleMovies();
+  final List<MediaContent> _tvShows = MediaContent.getSampleTVShows();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  //_handleContentSelected
+  void _handleContentSelected(Map<String, dynamic> content) {
+    // Show details page or play content
+   Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => player.VideoPlayerScreen(videoData: content),
+    ),
+   );
+  }
   
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        title: Row(
-          children: [
-            // Logo
-            Image.asset(
-              'assets/images/logo.png',
-              height: 32,
-              errorBuilder: (context, error, stackTrace) => 
-                const Text('ZynoFlix', style: TextStyle(fontWeight: FontWeight.bold)),
+      body: FocusScope(
+        child: RawKeyboardListener(
+          focusNode: _focusNode,
+          onKey: _handleKeyEvent,
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Featured Content Carousel
+                  FeaturedContentCarousel(
+                    onContentSelected: _handleContentSelected,
+                  ),
+                  
+                  EnglishVideosScreen(language: 'Tamil'),
+                  const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Telugu'),
+                  const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Hindi'),
+                  const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Malayalam'),
+                  // const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Kannada'),
+                  // const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'English'),
+                  // const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Korean'),
+                  // const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Japanese'),
+                  // const SizedBox(height: 16),
+
+                  EnglishVideosScreen(language: 'Chinese'),
+                  // const SizedBox(height: 16),
+
+                  // // Content rows
+                  // SizedBox(
+                  //   height: 220,
+                  //   child: ListView.builder(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: _featuredContent.length,
+                  //     itemBuilder: (context, index) {
+                  //       final content = _featuredContent[index];
+                  //       return _buildContinueWatchingItem(context, content);
+                  //     },
+                  //   ),
+                  // ),
+                  
+                  // // Movies Grid
+                  // ContentGrid(
+                  //   title: 'Movies',
+                  //   contentList: _movies,
+                  //   onContentSelected: _handleContentSelected,
+                  // ),
+                  
+                  // // TV Shows Grid
+                  // ContentGrid(
+                  //   title: 'TV Shows',
+                  //   contentList: _tvShows,
+                  //   onContentSelected: _handleContentSelected,
+                  // ),
+                  
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
-            const Spacer(),
-            
-            // Search button
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.white),
-              onPressed: () {
-                // Handle search
-              },
-            ),
-            
-            // Profile button
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: AppTheme.primaryColor,
-              child: const Text('G', style: TextStyle(color: Colors.white)),
-            ),
-            const SizedBox(width: 16),
-          ],
+          ),
         ),
       ),
-      
-      body: _buildBody(),
-      
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: AppTheme.surfaceColor,
-        selectedIndex: _selectedNavIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _selectedNavIndex = index;
-          });
-        },
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.video_library_outlined),
-            selectedIcon: Icon(Icons.video_library),
-            label: 'Library',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
     );
   }
-  
-  Widget _buildBody() {
-    switch (_selectedNavIndex) {
-      case 0:
-        return _buildHomeTab();
-      case 1:
-        return _buildExploreTab();
-      case 2:
-        return _buildLibraryTab();
-      case 3:
-        return _buildProfileTab();
-      default:
-        return _buildHomeTab();
-    }
-  }
-  
-  Widget _buildHomeTab() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Banner section
-          const SizedBox(
-            height: 500, // Adjust based on screen size
-            child: BannerScreen(),
-          ),
-          
-          // Trending section
-          _buildSection('Trending Now', _buildPlaceholderRow()),
-          
-          // Popular section
-          _buildSection('Popular Movies', _buildPlaceholderRow()),
-          
-          // New releases section
-          _buildSection('New Releases', _buildPlaceholderRow()),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildExploreTab() {
-    return const Center(
-      child: Text(
-        'Explore Tab',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
-  }
-  
-  Widget _buildLibraryTab() {
-    return const Center(
-      child: Text(
-        'Library Tab',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
-  }
-  
-  Widget _buildProfileTab() {
-    return const Center(
-      child: Text(
-        'Profile Tab',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
-  }
-  
-  Widget _buildSection(String title, Widget content) {
+
+  Widget _buildContinueWatchingItem(BuildContext context, MediaContent content) {
+    final double width = ResponsiveLayout.isTV(context) ? 300.0 : 220.0;
+    
     return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          content,
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildPlaceholderRow() {
-    return Container(
-      height: 180,
-      margin: const EdgeInsets.only(bottom: 16),
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildPlaceholderCard();
-        },
-      ),
-    );
-  }
-  
-  Widget _buildPlaceholderCard() {
-    return Container(
-      width: 120,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: AppTheme.cardColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 4,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.cardColor.withOpacity(0.8),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Thumbnail with progress indicator
+            Stack(
+              children: [
+                // Thumbnail
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Image.network(
+                      content.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[800],
+                          child: const Center(
+                            child: Icon(
+                              Icons.error_outline,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
-              child: const Center(
-                child: Icon(Icons.movie, color: Colors.white30, size: 32),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                color: AppTheme.cardColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
+                
+                // Progress bar
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: LinearProgressIndicator(
+                    value: 0.3 + (0.1 * (content.id.hashCode % 7)), // Random progress for demo
+                    minHeight: 4,
+                    backgroundColor: Colors.grey.withOpacity(0.5),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                  ),
                 ),
-              ),
+                
+                // Play button overlay
+                Positioned.fill(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _handleContentSelected(content as Map<String, dynamic>),
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: const Center(
+                        child: Icon(
+                          Icons.play_circle_outline,
+                          color: Colors.white,
+                          size: 48,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            
+            // Title
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                'Loading...',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize:
-                  12,
-                ),
+                content.title,
+                style: Theme.of(context).textTheme.titleMedium,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          ),
-        ],
+            
+            // Episode info
+            Text(
+              content.contentType == 'tvShow' 
+                  ? 'S1:E${content.id.hashCode % 10 + 1} • Continue' 
+                  : '${content.year} • Continue',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+
+  void _handleKeyEvent(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.select) {
+        // Handle select button press
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        // Handle left arrow key
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        // Handle right arrow key
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        // Handle up arrow key
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        // Handle down arrow key
+      }
+    }
   }
 } 

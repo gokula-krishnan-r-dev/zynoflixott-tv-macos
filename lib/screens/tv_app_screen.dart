@@ -43,7 +43,7 @@ class _TVAppScreenState extends State<TVAppScreen> {
   Widget _buildNavigationBar() {
     return Container(
       height: 60,
-      color: AppTheme.cardColor,
+      color: Colors.transparent,
       child: Row(
         children: [
           Padding(
@@ -201,37 +201,7 @@ class _TVAppScreenState extends State<TVAppScreen> {
     );
   }
 
-  Widget _buildNavButton(int index, String label, IconData icon) {
-    final bool isSelected = _selectedIndex == index;
-    
-    return InkWell(
-      onTap: () => _handleNavigation(index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : AppTheme.secondaryTextColor,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.white : AppTheme.secondaryTextColor,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
+ 
   Widget _buildScreen() {
     switch (_selectedIndex) {
       case 0: // Home
@@ -278,9 +248,5 @@ class _TVAppScreenState extends State<TVAppScreen> {
     );
   }
 
-  void _handleNavigation(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  
 } 

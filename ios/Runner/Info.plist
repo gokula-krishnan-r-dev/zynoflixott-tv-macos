@@ -45,5 +45,21 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Network Access Permissions -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>ZynoFlix needs to access your local network to discover and connect to devices for content streaming.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_http._tcp</string>
+	</array>
 </dict>
 </plist>

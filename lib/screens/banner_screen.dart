@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../services/banner_service.dart';
 import '../theme/app_theme.dart';
+import 'package:zynoflixott_tv/screens/video_player_screen.dart' as player;
 
 class BannerScreen extends StatefulWidget {
   const BannerScreen({super.key});
@@ -21,6 +22,8 @@ class _BannerScreenState extends State<BannerScreen> {
   void initState() {
     super.initState();
     _initBannerQuery();
+
+    print('banner query: ${_bannerQuery.data}');
     
     // Auto-scroll timer for carousel
     Future.delayed(const Duration(seconds: 1), () {
@@ -35,6 +38,8 @@ class _BannerScreenState extends State<BannerScreen> {
       parser: (data) => data['video'] as List<dynamic>,
       refreshInterval: const Duration(minutes: 10), // Refresh every 10 minutes
     );
+
+    print('banner query: ${_bannerQuery.data}');
   }
   
   void _startAutoScroll() {
@@ -177,6 +182,12 @@ class _BannerScreenState extends State<BannerScreen> {
               final video = bannerVideos[index] as Map<String, dynamic>;
               return GestureDetector(
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => player.VideoPlayerScreen(videoData: video),
+                    ),
+                  );
                   // Handle video selection
                 },
                 child: _buildBannerItem(context, video),
@@ -356,6 +367,12 @@ class _BannerScreenState extends State<BannerScreen> {
                   ElevatedButton.icon(
                     onPressed: () {
                       // Handle watch action
+                        Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => player.VideoPlayerScreen(videoData: video),
+                    ),
+                  );
                     },
                     icon: const Icon(Icons.play_arrow),
                     label: const Text('Watch Now'),

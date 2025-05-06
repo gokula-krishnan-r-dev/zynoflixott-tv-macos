@@ -1,34 +1,21 @@
 import 'package:flutter/material.dart';
 
-/// Defines the app's color theme and styling
 class AppTheme {
-  // Primary brand colors
-  static const Color primaryColor = Color(0xFFE50914);
-  static const Color accentColor = Color(0xFF0071EB);
+  static const Color primaryColor = Color(0xFF0A84FF);
+  static const Color backgroundColor = Color(0xFF000000);
+  static const Color cardColor = Color(0xFF1C1C1E);
+  static const Color surfaceColor = Color(0xFF2C2C2E);
+  static const Color textColor = Color(0xFFFFFFFF);
+  static const Color secondaryTextColor = Color(0xFF8E8E93);
+  static const Color accentColor = Color(0xFF30D158);
+  static const Color focusColor = Color(0xFF0A84FF);
+  static const Color errorColor = Color(0xFFFF453A);
   
-  // Background colors
-  static const Color backgroundColor = Color(0xFF0C0C0C);
-  static const Color surfaceColor = Color(0xFF1F1F1F);
-  static const Color cardColor = Color(0xFF262626);
-  
-  // Text colors
-  static const Color primaryTextColor = Color(0xFFFFFFFF);
-  static const Color secondaryTextColor = Color(0xFFB3B3B3);
-  
-  // Utility colors
-  static const Color errorColor = Color(0xFFE87C03);
-  static const Color successColor = Color(0xFF46D369);
-  static const Color warningColor = Color(0xFFFFB13D);
-  
-  // TV App specific colors
-  static const Color focusColor = Color(0xFFE50914);
-  static const Color unfocusedColor = Color(0x80FFFFFF);
-  
-  // Theme 
   static ThemeData darkTheme() {
     return ThemeData.dark().copyWith(
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
+      cardColor: cardColor,
       colorScheme: const ColorScheme.dark(
         primary: primaryColor,
         secondary: accentColor,
@@ -38,34 +25,82 @@ class AppTheme {
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
-          color: primaryTextColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 32,
+          fontSize: 48.0,
+          fontWeight: FontWeight.w700,
+          color: textColor,
+          letterSpacing: -0.5,
+        ),
+        displayMedium: TextStyle(
+          fontSize: 34.0,
+          fontWeight: FontWeight.w700,
+          color: textColor,
+          letterSpacing: -0.5,
+        ),
+        displaySmall: TextStyle(
+          fontSize: 28.0,
+          fontWeight: FontWeight.w600,
+          color: textColor,
+        ),
+        headlineLarge: TextStyle(
+          fontSize: 24.0,
+          fontWeight: FontWeight.w600,
+          color: textColor,
         ),
         headlineMedium: TextStyle(
-          color: primaryTextColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
+          fontSize: 20.0,
+          fontWeight: FontWeight.w600,
+          color: textColor,
         ),
         titleLarge: TextStyle(
-          color: primaryTextColor,
+          fontSize: 18.0,
           fontWeight: FontWeight.w600,
-          fontSize: 20,
-        ),
-        titleMedium: TextStyle(
-          color: primaryTextColor,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
+          color: textColor,
         ),
         bodyLarge: TextStyle(
-          color: primaryTextColor,
-          fontSize: 16,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w400,
+          color: textColor,
         ),
         bodyMedium: TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w400,
+          color: textColor,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 12.0,
+          fontWeight: FontWeight.w400,
           color: secondaryTextColor,
-          fontSize: 14,
         ),
       ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: backgroundColor,
+        elevation: 0,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: backgroundColor,
+        indicatorColor: focusColor.withOpacity(0.2),
+        labelTextStyle: MaterialStateProperty.all(
+          const TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w500,
+            color: textColor,
+          ),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: textColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24.0,
+            vertical: 12.0,
+          ),
+        ),
+      ),
+      focusColor: focusColor,
     );
   }
 } 
