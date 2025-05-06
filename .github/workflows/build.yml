@@ -1,4 +1,7 @@
 name: Build Windows EXE
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
