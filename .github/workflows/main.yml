@@ -1,1 +1,29 @@
 
+name: Build Windows EXE
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Enable Windows support
+      run: flutter config --enable-windows-desktop
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Build for Windows
+      run: flutter build windows
+
+    - name: Upload executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: my_app_windows
+        path: build/windows/runner/Release/
